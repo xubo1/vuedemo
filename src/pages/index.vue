@@ -14,14 +14,101 @@
              <div class="hr"></div>
           </template>
         </div>
+        <div class="index-left-block lastest-news"> 
+          <h2>最新消息</h2>
+          <ul>
+            <li v-for="item in newsList">
+              <a :href="item.url">{{item.title}}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="index-right">
+        <slide-show :slides="slides"></slide-show>
+        <div class="index-board-list">
+          <div class="index-board-item" v-for="(item,index) in boardList"
+          :class="[{'line-last' : index % 2 !== 0},'index-board-' + item.id ]">
+            <div class="index-board-item-inner">
+              <h2>{{item.title}}</h2>
+              <p>{{item.description}}</p>
+              <div class="index-board-button"> 
+                <a href="" class="button">立即购买</a>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 </template>
 
 <script>
+import axios from 'axios'
+import slideShow from '../components/slideShow.vue'
 export default {
+  components: {
+    slideShow
+  },
+  mounted(){
+    axios.get('api/getNewsList')
+    .then((res) => {
+      console.log(res)
+      this.newsList = res.data.list
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  },
   data() {
     return{
+      slides: [
+        {
+        src: require('../assets/slideShow/pic1.jpg'),
+        title: 'xxx1',
+        href: 'detail/analysis'
+      },
+        {
+        src: require('../assets/slideShow/pic2.jpg'),
+        title: 'xxx2',
+        href: 'detail/count'
+      },
+        {
+        src: require('../assets/slideShow/pic3.jpg'),
+        title: 'xxx3',
+        href: 'detail/xxx.com'
+      },
+        {
+        src: require('../assets/slideShow/pic4.jpg'),
+        title: 'xxx4',
+        href: 'detail/forecast'
+      }
+      ],
+      newsList: [],
+      boardList:[
+        {
+          title: '开放产品',
+          description: '开放产品是一款新产品',
+          id: 'car',
+          saleout: false
+         },
+           {
+          title: '品牌营销',
+          description: '品牌营销帮你更好的找到好的品牌',
+          id: 'earth',
+          saleout: false
+         },
+           {
+          title: '使命送达',
+          description: '使命必达快速迭代永远保持最前端的速度',
+          id: 'loud',
+          saleout: false
+         },
+           {
+          title: '永攀高峰',
+          description: '永攀高峰，永不放弃',
+          id: 'hill',
+          saleout: false
+         }
+      ],
       productList:{
         pc:{
           title: 'pc产品',
@@ -132,7 +219,18 @@ export default {
   padding-left: 120px;
   line-height: 1.6;
 }
-
+.index-board-car .index-board-item-inner{
+  background: url(../assets/images/1.png) no-repeat;
+}
+.index-board-loud .index-board-item-inner{
+  background: url(../assets/images/2.png) no-repeat;
+}
+.index-board-earth .index-board-item-inner{
+  background: url(../assets/images/3.png) no-repeat;
+}
+.index-board-hill .index-board-item-inner{
+  background: url(../assets/images/4.png) no-repeat;
+}
 .index-board-item h2 {
   font-size: 18px;
   font-weight: bold;
