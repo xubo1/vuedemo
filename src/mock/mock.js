@@ -5,4 +5,10 @@ Mock.mock(/getNewsList/, {
         'url': '@url',
         'title': '@ctitle(4, 8)'
     }]
+}),
+Mock.mock(/login/, {
+    data:{
+        name: 'xb',
+        password: '123456'
+    }
 })

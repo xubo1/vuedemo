@@ -1,17 +1,21 @@
 <template>
-  <div class="slide-show">
+  <div class="slide-show" @mousemove="clearInv" @mouseout="runInv">
       <div class="slide-image">
-        <a href="xxxx">
-          <img :src="slides[nowIndex].src">
+        <a :href="slides[nowIndex].href">
+           <transition name="slide-trans">
+          <img v-if="isShow" :src="slides[nowIndex].src">
+        </transition>
+        <transition name="slide-trans-old">
+          <img v-if="!isShow" :src="slides[nowIndex].src">
+        </transition>
         </a>
       </div>
-      <h2>{{slides[nowIndex].title}}</h2>
       <ul class="slide-pages">
-       <li>&lt;</li>
+       <li @click="goto(prevIndex)">&lt;</li>
         <li v-for="(item,index) in slides" @click="goto(index)">
           <a>{{index+1}}</a>
         </li>
-        <li>&lt;</li>
+        <li @click="goto(nextIndex)">&gt;</li>
       </ul>
   </div>
 </template>
@@ -22,148 +26,108 @@ export default {
    slides:{
      type: Array,
      default: []
+   },
+   inv: {
+     type: Number,
+     default: 1000
    }
  },
   data () {
     return {
-     nowIndex: 1
+     nowIndex: 0,
+     isShow: true
+    }
+  },
+  computed:{
+    prevIndex(){
+      if(this.nowIndex === 0){
+        return this.slides.length -1
+      }else{
+        return this.nowIndex -1
+      }
+    },
+    nextIndex(){
+      if(this.nowIndex === this.slides.length -1){
+        return  0;
+      }else{
+        return this.nowIndex + 1
+      }
     }
   },
   methods:{
     goto(index){
-      this.nowIndex=index
+      this.isShow =false
+      setTimeout(()=>{
+        this.isShow =true
+        this.nowIndex=index
+      })
+    },
+    runInv(){
+      this.invId= setInterval(()=>{
+       this.goto(this.nextIndex)
+      },this.inv)
+    },
+    clearInv(){
+      clearInterval(this.invId)
     }
   },
   mounted(){
-    console.log(this.slides)
+    this.runInv()
   }
   
 }
 </script>
 
 <style scoped>
-.index-wrap {
-  width: 1000px;
-  margin: 0 auto;
-  overflow: hidden;
+.slide-trans-enter-active {
+  transition: all .5s;
 }
-.index-left {
-  float: left;
-  width: 30%;
-  text-align: left;
+.slide-trans-enter {
+  transform: translateX(900px);
 }
-.index-right {
-  float: left;
-  width: 70%;
+.slide-trans-old-leave-active {
+  transition: all .5s;
+  transform: translateX(-900px);
 }
-.index-left-block {
-  margin: 0 15px 15px 15px;
-  background: #fff;
-  box-shadow: 0 0 1px #ddd;
-  border-radius: 10px;
-}
-.index-left-block .hr {
-  margin-bottom: 20px;
-}
-.index-left-block h2 {
-  background: #4fc08d;
-  color: #fff;
-  padding: 10px 15px;
-  margin-bottom: 20px;
-}
-.index-left-block h3 {
-  padding: 0 15px 5px 15px;
-  font-weight: bold;
-  color: #222;
-}
-.index-left-block ul {
-  padding: 10px 15px;
-}
-.index-left-block li {
-  padding: 5px;
-}
-.index-board-list {
-  overflow: hidden;
-}
-.index-board-item {
-  float: left;
-  width: 43%;
-  background: #fff;
-  box-shadow: 0 0 1px #ddd;
-  padding: 3%;
-  margin-right: 2%;
-  margin-bottom: 20px;
-  border-radius: 0 0 10px 10px;
-}
-.index-board-item-inner {
-  min-height: 125px;
-  padding-left: 120px;
-  line-height: 1.6;
-}
-.index-board-car .index-board-item-inner{
-  background: url(../assets/images/1.png) no-repeat;
-}
-.index-board-loud .index-board-item-inner{
-  background: url(../assets/images/2.png) no-repeat;
-}
-.index-board-earth .index-board-item-inner{
-  background: url(../assets/images/3.png) no-repeat;
-}
-.index-board-hill .index-board-item-inner{
-  background: url(../assets/images/4.png) no-repeat;
-}
-.index-board-item h2 {
-  font-size: 18px;
-  font-weight: bold;
-  color: #000;
-  margin-bottom: 15px;
-}
-.line-last {
-  margin-right: 0;
-}
-.index-board-button {
-  margin-top: 20px;
-}
-.lastest-news {
-  min-height: 512px;
-}
-.hot-tag {
-  background: #c04fb1;
-  color: #fff;
-  font-size: 12px;
-  padding: 0 5px;
-}
-.new-item {
-  display: inline-block;
-  width: 230px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.VueCarousel {
-  margin-bottom: 10px;
-}
-.VueCarousel-slide {
+.slide-show {
   position: relative;
+  margin: 15px 15px 15px 0;
+  width: 900px;
+  height: 500px;
+  overflow: hidden;
+}
+.slide-show h2 {
+  position: absolute;
+  width: 100%;
+  height: 100%;
   color: #fff;
-  font-family: Arial;
-  font-size: 24px;
-  text-align: center;
-  min-height: 100px;
+  background: #000;
+  opacity: .5;
+  bottom: 0;
+  height: 30px;
+  text-align: left;
+  padding-left: 15px;
+}
+.slide-img {
   width: 100%;
 }
-.VueCarousel-slide img {
+.slide-img img {
   width: 100%;
+  position: absolute;
+  top: 0;
 }
-.VueCarousel-navigation-prev {
-  left: 30px !important;
-}
-.VueCarousel-navigation-next {
-  right: 30px !important;
-}
-.VueCarousel-pagination {
+.slide-pages {
   position: absolute;
   bottom: 10px;
-  z-index: 9;
+  
+}
+.slide-pages li {
+  display: inline-block;
+  padding: 0 10px;
+  cursor: pointer;
+  color: #fff;
+}
+.slide-pages li .on {
+  text-decoration: underline;
 }
 </style>
