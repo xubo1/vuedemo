@@ -69,6 +69,13 @@ export default {
     })
     .catch((error) => {
       console.log(error)
+    }),
+      axios.get('api/getBoardList')
+    .then((res) => {
+      this.boardList = res.data.list
+    })
+    .catch((error) => {
+      console.log(error)
     })
   },
   data() {
@@ -77,32 +84,7 @@ export default {
       slides: [],
       newsList: [],
       productList: '',
-      boardList:[
-        {
-          title: '开放产品',
-          description: '开放产品是一款新产品',
-          id: 'car',
-          saleout: false
-         },
-           {
-          title: '品牌营销',
-          description: '品牌营销帮你更好的找到好的品牌',
-          id: 'earth',
-          saleout: false
-         },
-           {
-          title: '使命送达',
-          description: '使命必达快速迭代永远保持最前端的速度',
-          id: 'loud',
-          saleout: false
-         },
-           {
-          title: '永攀高峰',
-          description: '永攀高峰，永不放弃',
-          id: 'hill',
-          saleout: false
-         }
-      ]
+      boardList:[]
     }
   }
 }
