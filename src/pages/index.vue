@@ -51,8 +51,21 @@ export default {
   mounted(){
     axios.get('api/getNewsList')
     .then((res) => {
-      console.log(res)
       this.newsList = res.data.list
+    })
+    .catch((error) => {
+      console.log(error)
+    }),
+    axios.get('api/getProductList')
+    .then((res) => {
+      this.productList = res.data.productList
+    })
+    .catch((error) => {
+      console.log(error)
+    }),
+     axios.get('api/getSlides')
+    .then((res) => {
+      this.slides = res.data.list
     })
     .catch((error) => {
       console.log(error)
@@ -61,29 +74,9 @@ export default {
   data() {
     return{
       slideSpeed: 5000,
-      slides: [
-        {
-        src: require('../assets/slideShow/pic1.jpg'),
-        title: 'xxx1',
-        href: 'detail/analysis'
-      },
-        {
-        src: require('../assets/slideShow/pic2.jpg'),
-        title: 'xxx2',
-        href: 'detail/count'
-      },
-        {
-        src: require('../assets/slideShow/pic3.jpg'),
-        title: 'xxx3',
-        href: 'detail/xxx.com'
-      },
-        {
-        src: require('../assets/slideShow/pic4.jpg'),
-        title: 'xxx4',
-        href: 'detail/forecast'
-      }
-      ],
+      slides: [],
       newsList: [],
+      productList: '',
       boardList:[
         {
           title: '开放产品',
@@ -109,53 +102,7 @@ export default {
           id: 'hill',
           saleout: false
          }
-      ],
-      productList:{
-        pc:{
-          title: 'pc产品',
-          list: [
-            {
-              name: '数据统计',
-              url: 'http://starcraft.com'
-            },
-             {
-              name: '数据预测',
-              url: 'http://warcraft.com',
-              hot: true
-            },
-             {
-              name: '流量分析',
-              url: 'http://overwath.com'
-            },
-             {
-              name: '广告发布',
-              url: 'http://hearstone.com'
-            }
-          ]
-        },
-        app:{
-           title: '应用类',
-          list: [
-            {
-              name: '91助手',
-              url: 'http://weixin.com'
-            },
-             {
-              name: '产品助手',
-              url: 'http://twitter.com'
-            },
-             {
-              name: '智能地图',
-              url: 'http://maps.com'
-            },
-             {
-              name: '团队语音',
-              url: 'http://phone.com'
-            }
-          ]
-
-        }
-      }
+      ]
     }
   }
 }
