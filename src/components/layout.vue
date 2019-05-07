@@ -21,7 +21,9 @@
     </div>
   <div class="app-content"></div>
     <router-view></router-view>
-  <div class="app-footer">footer</div>
+   <div class="app-foot">
+      <p>© 2016 fishenal MIT</p>
+    </div>
   <my-dialog :is-show="isShowLogDialog" @on-close="closeDialog('isShowLogDialog')">
     <log-from @has-log="onSuccessLog"></log-from>
   </my-dialog>

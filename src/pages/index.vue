@@ -24,7 +24,9 @@
         </div>
       </div>
       <div class="index-right">
-        <slide-show :slides="slides" :inv="slideSpeed"></slide-show>
+        <slide-show :slides="slides" :inv="slideSpeed">
+
+        </slide-show>
         <div class="index-board-list">
           <div class="index-board-item" v-for="(item,index) in boardList"
           :class="[{'line-last' : index % 2 !== 0},'index-board-' + item.id ]">
@@ -32,7 +34,7 @@
               <h2>{{item.title}}</h2>
               <p>{{item.description}}</p>
               <div class="index-board-button"> 
-                <a href="" class="button">立即购买</a>
+               <router-link class="button" :to="{name: item.toKey}">立即购买</router-link>
               </div>
             </div>
           </div>
@@ -63,14 +65,15 @@ export default {
     .catch((error) => {
       console.log(error)
     }),
-     axios.get('api/getSlides')
-    .then((res) => {
-      this.slides = res.data.list
-    })
-    .catch((error) => {
-      console.log(error)
-    }),
-      axios.get('api/getBoardList')
+    //  axios.get('api/getSlides')
+    // .then((res) => {
+    //   console.log(res)
+    //   this.slides = res.data
+    // })
+    // .catch((error) => {
+    //   console.log(error)
+    // }),
+     axios.get('api/getBoardList')
     .then((res) => {
       this.boardList = res.data.list
     })
@@ -81,7 +84,30 @@ export default {
   data() {
     return{
       slideSpeed: 5000,
-      slides: [],
+      slides: [ {
+        src: require('../assets/slideShow/pic1.jpg'),
+        title: 'xxx1',
+        href: 'detail/count',
+        toKey: 'detail/count'
+      },
+        {
+        src: require('../assets/slideShow/pic2.jpg'),
+        title: 'xxx2',
+        href: 'detail/forecast',
+        toKey: 'detail/forecast'
+      },
+        {
+        src: require('../assets/slideShow/pic3.jpg'),
+        title: 'xxx3',
+        href: 'detail/analysis',
+        toKey: 'detail/analysis'
+      },
+        {
+        src: require('../assets/slideShow/pic4.jpg'),
+        title: 'xxx4',
+        href: 'detail/publish',
+        toKey: 'detail/publish'
+      }],
       newsList: [],
       productList: '',
       boardList:[]
@@ -149,13 +175,13 @@ export default {
   padding-left: 120px;
   line-height: 1.6;
 }
-.index-board-car .index-board-item-inner{
+.index-board-earth .index-board-item-inner{
   background: url(../assets/images/1.png) no-repeat;
 }
-.index-board-loud .index-board-item-inner{
+.index-board-car .index-board-item-inner{
   background: url(../assets/images/2.png) no-repeat;
 }
-.index-board-earth .index-board-item-inner{
+.index-board-loud .index-board-item-inner{
   background: url(../assets/images/3.png) no-repeat;
 }
 .index-board-hill .index-board-item-inner{

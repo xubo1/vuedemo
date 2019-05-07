@@ -2,10 +2,12 @@
     <div class="detail-wrap">
         <div class="detail-left">
             <div class="product-board">
-                <img src="../assets/images/1.png">
-                <ui>
-                    <li v-for="item in products">{{item.name}}</li>
-                 </ui>
+                <img :src="productIcon">
+                <ul>
+                <router-link v-for="item in products" :to="{ path: item.path }" tag="li" active-class="active" :key="item.path">
+                 {{ item.name }}
+                </router-link>
+                </ul>
             </div>
         </div>
         <div class="detail-right">
@@ -50,6 +52,11 @@ export default {
         '/detail/publish': require("../assets/images/4.png")
       }
     } 
+ },
+ computed:{
+   productIcon(){
+     return this.imgMap[this.$route.path]
+   }
  }
    
 }
